@@ -1,0 +1,281 @@
+* {
+	font-family: "Fira Code", monospace;
+}
+
+/* #region Media Queries */
+
+@media screen and (min-width: 992px) {
+	#main {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		width: 99vw;
+		height: 98vh;
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: row;
+		flex-direction: row;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+	}
+
+	#plot {
+		height: 90%;
+	}
+
+	#commands {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		width: 40%;
+		height: 90%;
+		font-size: 2em;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+	}
+}
+
+@media screen and (max-width: 992px) {
+	#main {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		width: 99vw;
+		height: 98vh;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+	}
+
+	#plot {
+		width: 100%;
+		height: 100%;
+	}
+
+	#commands {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		width: 100%;
+		height: 100%;
+		font-size: 2em;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+	}
+
+	#title {
+		font-size: 1.125em !important;
+	}
+
+	h1 {
+		font-size: 1.5em;
+	}
+
+	#sliderLabel,
+	#result {
+		font-size: 0.95em;
+	}
+}
+
+/* #endregion Media Queries */
+
+#plot {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+h1 {
+	width: 100%;
+	height: 2.5%;
+	text-align: center;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* #region Arrow Button */
+
+.arrow {
+	border: solid black;
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	padding: 3px;
+}
+
+.right {
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	-webkit-transform: rotate(-45deg);
+}
+
+.left {
+	-ms-transform: rotate(135deg);
+	transform: rotate(135deg);
+	-webkit-transform: rotate(135deg);
+}
+
+.button {
+	-webkit-box-shadow: 2px 2px 5px #000000;
+	box-shadow: 2px 2px 5px #000000;
+	border: 0px solid #000000;
+	height: 50px;
+	width: 50px;
+	border-radius: 10px;
+	background: #ffffff;
+	cursor: pointer;
+	margin: 10px;
+	outline: none;
+	text-align: center;
+}
+
+.button:active {
+	-webkit-transform: scale(0.98);
+	-ms-transform: scale(0.98);
+	transform: scale(0.98);
+}
+
+/* #endregion Arrow Button */
+
+/* #region Input side */
+
+#input {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+}
+
+#titleContainer {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+
+#title {
+	width: 60%;
+	font-size: 2.5em;
+	text-align: center;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* #endregion Input side */
+
+/* #region Slider Bar */
+
+#plotSlider {
+	height: 48px;
+	-webkit-appearance: none;
+	margin: 10px 0;
+	width: 80%;
+}
+#plotSlider:focus {
+	outline: none;
+}
+#plotSlider::-webkit-slider-runnable-track {
+	height: 15px;
+	cursor: pointer;
+	-webkit-box-shadow: 1px 1px 3px #000000;
+	box-shadow: 1px 1px 3px #000000;
+	background: #1db89e;
+	border-radius: 5px;
+	border: 1px solid #000000;
+}
+#plotSlider::-webkit-slider-thumb {
+	-webkit-box-shadow: 2px 2px 5px #000000;
+	box-shadow: 2px 2px 5px #000000;
+	border: 0px solid #000000;
+	height: 40px;
+	width: 40px;
+	border-radius: 10px;
+	background: #ffffff;
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: -13px;
+}
+#plotSlider:focus::-webkit-slider-runnable-track {
+	background: #1db89e;
+}
+#plotSlider::-moz-range-track {
+	height: 15px;
+	cursor: pointer;
+	box-shadow: 1px 1px 3px #000000;
+	background: #1db89e;
+	border-radius: 5px;
+	border: 1px solid #000000;
+}
+#plotSlider::-moz-range-thumb {
+	box-shadow: 2px 2px 5px #000000;
+	border: 0px solid #000000;
+	height: 40px;
+	width: 40px;
+	border-radius: 10px;
+	background: #ffffff;
+	cursor: pointer;
+}
+#plotSlider::-ms-track {
+	height: 15px;
+	cursor: pointer;
+	background: transparent;
+	border-color: transparent;
+	color: transparent;
+}
+#plotSlider::-ms-fill-lower {
+	background: #1db89e;
+	border: 1px solid #000000;
+	border-radius: 10px;
+	box-shadow: 1px 1px 3px #000000;
+}
+#plotSlider::-ms-fill-upper {
+	background: #1db89e;
+	border: 1px solid #000000;
+	border-radius: 10px;
+	box-shadow: 1px 1px 3px #000000;
+}
+#plotSlider::-ms-thumb {
+	margin-top: 1px;
+	box-shadow: 2px 2px 5px #000000;
+	border: 0px solid #000000;
+	height: 40px;
+	width: 40px;
+	border-radius: 10px;
+	background: #ffffff;
+	cursor: pointer;
+}
+#plotSlider:focus::-ms-fill-lower {
+	background: #1db89e;
+}
+#plotSlider:focus::-ms-fill-upper {
+	background: #1db89e;
+}
+
+/* #endregion Slider Bar */
