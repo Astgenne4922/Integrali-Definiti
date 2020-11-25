@@ -7,7 +7,8 @@ const functions = [
 
 const f = x => functionPlot.$eval.builtIn(plot.options.data[0], "fn", { x: x });
 
-let IDX = 0;
+let IDX = JSON.parse(localStorage.getItem("functionIdx") ?? 0);
+$("#plotSlider").val(JSON.parse(localStorage.getItem("sliderVal") ?? 14)).change();
 
 let plot = functionPlot({
 	target: "#plot",
@@ -64,6 +65,7 @@ $("#titleContainer .button").click(e => {
 		if (IDX > 0) changeFunction(--IDX);
 		else changeFunction((IDX = 3));
 	}
+	localStorage.setItem("functionIdx", "" + IDX);
 });
 
 let timeout, interval;
@@ -98,13 +100,14 @@ function calculate(n, label) {
 	}
 
 	$(label).html(
-		`<span style="color: #60b030">S<sub>n</sub>: ${s.toFixed(3)}</span><br>
-        <span style="color: #ff5060">S<sub>N</sub>: ${S.toFixed(3)}</span><br>
+		`<span style="color: #60b030">S<sub>n</sub>: ${s.toFixed(10)}</span><br>
+        <span style="color: #ff5060">S<sub>N</sub>: ${S.toFixed(10)}</span><br>
         Precisione: ${isNaN(((s / S) * 100).toFixed(3)) ? 0 : ((s / S) * 100).toFixed(3)}%`
 	);
 }
 
 function changeSlider() {
+	localStorage.setItem("sliderVal", $("#plotSlider").val());
 	$("#sliderLabel").text(`Numero di suddivisioni: ${$("#plotSlider").val() - 1}`);
 	plot.options.data[2].nSamples = $("#plotSlider").val();
 	plot.options.data[1].nSamples = $("#plotSlider").val();
