@@ -1,44 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <script src="lib/jquery.min.js"></script>
-        <script src="lib/function-plot.js"></script>
+        <!--#region Lib Scripts-->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://www.desmos.com/api/v1.5/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+
+        <link rel="stylesheet" type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"
+            type="text/javascript"></script>
+
+        <!--#endregion Lib Scripts-->
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
 
-        <link rel="stylesheet" href="style.min.css">
+        <link rel="stylesheet" href="style.css">
 
         <link rel="shortcut icon"
-            href="https://www.shareicon.net/data/128x128/2015/11/17/673651_mathematics_512x512.png"
-            type="image/x-icon">
+            href="https://www.shareicon.net/data/128x128/2015/11/17/673651_mathematics_512x512.png" type="image/x-icon">
 
         <title>Integrali Definiti</title>
     </head>
 
     <body>
         <div id="main">
-            <h1>Approssimazione dell'Area di una Funzione</h1>
+            <div id="title">
+                <h1>Approssimazione dell'Area di una Funzione</h1>
+                <h1 id="function">f(x)=<span id="latex"></span></h1>
+            </div>
+
             <div id="plot"></div>
+
             <div id="commands">
-                <div id="titleContainer">
-                    <p id="title"></p>
+                <p id="range">I=[<span></span>,<span></span>]</p>
+
+                <div id="slider">
                     <p class="button"><i class="arrow left"></i></p>
-                    <p class="button"><i class="arrow right"></i></p>
-                </div>
-                <div id="input">
-                    <p class="button"><i class="arrow left"></i></p>
-                    <input id="plotSlider" type="range" min="1" max="1001" step="1" value="14">
+                    <input id="plotSlider" type="range" min="0" max="1000" step="1" value="2">
                     <p class="button"><i class="arrow right"></i></p>
                 </div>
                 <p id="sliderLabel"></p>
 
-                <p id="result"></p>
+                <p id="result">
+                    <span style="color: #60b030">S<sub>n</sub>: 0</span><br>
+                    <span style="color: #ff5060">S<sub>N</sub>: 0</span><br>
+                    <span style="color: #6050ff">Valore Reale: 0</span><br>
+                </p>
             </div>
         </div>
-        <script src="script.min.js"></script>
+
+        <script src="script.js"></script>
     </body>
+
 </html>

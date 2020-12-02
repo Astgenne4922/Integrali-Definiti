@@ -1,16 +1,21 @@
 * {
 	font-family: "Fira Code", monospace;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
 }
 
 /* #region Media Queries */
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 993px) {
 	#main {
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: flex;
-		width: 99vw;
-		height: 98vh;
+		height: 95vh;
 		-webkit-box-orient: horizontal;
 		-webkit-box-direction: normal;
 		-ms-flex-direction: row;
@@ -20,15 +25,17 @@
 	}
 
 	#plot {
-		height: 90%;
+		width: 50%;
+		height: 75%;
+		padding: 10px;
 	}
 
 	#commands {
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: flex;
-		width: 40%;
-		height: 90%;
+		width: 50%;
+		padding: 0 20px;
 		font-size: 2em;
 		-webkit-box-orient: vertical;
 		-webkit-box-direction: normal;
@@ -45,8 +52,8 @@
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: flex;
-		width: 99vw;
-		height: 98vh;
+		height: 98%;
+		width: 95%;
 		-webkit-box-orient: vertical;
 		-webkit-box-direction: normal;
 		-ms-flex-direction: column;
@@ -54,16 +61,15 @@
 	}
 
 	#plot {
-		width: 100%;
-		height: 100%;
+		height: 50vh;
+		padding: 20px;
 	}
 
 	#commands {
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: flex;
-		width: 100%;
-		height: 100%;
+		padding: 0 20px;
 		font-size: 2em;
 		-webkit-box-orient: vertical;
 		-webkit-box-direction: normal;
@@ -72,10 +78,6 @@
 		-webkit-box-pack: center;
 		-ms-flex-pack: center;
 		justify-content: center;
-	}
-
-	#title {
-		font-size: 1.125em !important;
 	}
 
 	h1 {
@@ -90,16 +92,33 @@
 
 /* #endregion Media Queries */
 
-#plot {
+#title {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	width: 100%;
+	height: 25%;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	justify-items: center;
+}
+
+h1 {
+	text-align: center;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 }
 
-h1 {
-	width: 100%;
-	height: 2.5%;
+#function {
+	font-size: 2em;
+	font-weight: bold;
 	text-align: center;
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -152,7 +171,7 @@ h1 {
 
 /* #region Input side */
 
-#input {
+#slider {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -162,25 +181,7 @@ h1 {
 	flex-direction: row;
 }
 
-#titleContainer {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: row;
-	flex-direction: row;
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-}
-
-#title {
+#range {
 	width: 100%;
 	font-size: 2em;
 	text-align: center;
@@ -189,6 +190,14 @@ h1 {
 	-ms-user-select: none;
 	user-select: none;
 	margin: 20px;
+}
+
+#latex {
+	font-family: "Times New Roman", Symbola, serif;
+}
+
+#latex * {
+	font-family: "Times New Roman", Symbola, serif;
 }
 
 /* #endregion Input side */
