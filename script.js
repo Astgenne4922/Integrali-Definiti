@@ -1,15 +1,29 @@
 //#region Loading LocalStorage Data
 
 const funcLatex = localStorage.getItem("funcLatex") === "" ? "x^2" : localStorage.getItem("funcLatex") ?? "x^2";
+
 $("#plotSlider")
 	.val(JSON.parse(localStorage.getItem("sliderVal")) ?? 2)
-	.change();
-$("#plotSlider").on("input", changeSlider);
+	.change()
+	.on("input", changeSlider);
 $("#sliderLabel").text(`Numero di suddivisioni: ${$("#plotSlider").val()}`);
 
 let [a, b] = [JSON.parse(localStorage.getItem("rangeA")) ?? 0, JSON.parse(localStorage.getItem("rangeB")) ?? 1];
 $("#range span:nth-child(1)").text(a);
 $("#range span:nth-child(2)").text(b);
+
+let [infsupShow, midShow, trapShow, simpsShow, isInvalidRange] = [
+	JSON.parse(localStorage.getItem("infsupShow")) ?? true,
+	JSON.parse(localStorage.getItem("midShow")) ?? false,
+	JSON.parse(localStorage.getItem("trapShow")) ?? false,
+	JSON.parse(localStorage.getItem("simpsShow")) ?? false,
+	JSON.parse(localStorage.getItem("isInvalidRange")) ?? false,
+];
+$("input[type='checkbox']").on("change", changeCheckbox);
+$("#infsup").prop("checked", infsupShow);
+$("#middle").prop("checked", midShow);
+$("#trap").prop("checked", trapShow);
+$("#simps").prop("checked", simpsShow);
 
 //#endregion Loading LocalStorage Data
 
@@ -87,21 +101,34 @@ plot.setState({
 				type: "expression",
 				id: "sum(infsup)_list",
 				latex:
-					"S_{infsup}=\\left[\\sum_{j=1}^{n}f\\left(a+\\left(j-1\\right)\\left(\\frac{b-a}{n}\\right)\\right)\\left(\\frac{b-a}{n}\\right),\\sum_{j=1}^{n}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\left(\\frac{b-a}{n}\\right),\\int_{a}^{b}f\\left(x\\right)dx\\right]",
+					"S_{infsup}=\\left[\\sum_{j=1}^{n}f\\left(a+\\left(j-1\\right)\\left(\\frac{b-a}{n}\\right)\\right)\\left(\\frac{b-a}{n}\\right),\\sum_{j=1}^{n}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\left(\\frac{b-a}{n}\\right)\\right]",
 				folderId: "approx_folder",
 			},
 			{
 				type: "expression",
 				id: "sum(mid)_list",
 				latex:
-					"S_{mid}=\\left[\\sum_{j=1}^{n}f\\left(a+\\left(j-\\frac{1}{2}\\right)\\left(\\frac{b-a}{n}\\right)\\right)\\left(\\frac{b-a}{n}\\right),\\int_{a}^{b}f\\left(x\\right)dx\\right]",
+					"S_{mid}=\\sum_{j=1}^{n}f\\left(a+\\left(j-\\frac{1}{2}\\right)\\left(\\frac{b-a}{n}\\right)\\right)\\left(\\frac{b-a}{n}\\right)",
 				folderId: "approx_folder",
 			},
 			{
 				type: "expression",
 				id: "sum(trap)_list",
 				latex:
-					"S_{trap}=\\left[\\left(\\frac{b-a}{n}\\right)\\left(\\frac{f\\left(a\\right)+f\\left(b\\right)}{2}+\\sum_{j=0}^{n-1}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\right),\\int_{a}^{b}f\\left(x\\right)dx\\right]",
+					"S_{trap}=\\left(\\frac{b-a}{n}\\right)\\left(\\frac{f\\left(a\\right)+f\\left(b\\right)}{2}+\\sum_{j=0}^{n-1}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\right)",
+				folderId: "approx_folder",
+			},
+			{
+				type: "expression",
+				id: "sum(simp)_list",
+				latex: "S_{simp}=a",
+				folderId: "approx_folder",
+			},
+			{
+				type: "expression",
+				id: "sum_list",
+				latex:
+					"S=\\left[S_{infsup}\\left[1\\right],S_{infsup}\\left[2\\right],S_{mid},S_{trap},S_{simp},\\int_{a}^{b}f\\left(x\\right)dx\\right]",
 				folderId: "approx_folder",
 			},
 			//#endregion Approximations
@@ -222,6 +249,30 @@ plot.setState({
 				folderId: "trap_folder",
 			},
 			//#endregion Trapezes
+			//#region Simpson
+			{ id: "simp_folder", title: "simp_folder", type: "folder" },
+			{
+				type: "expression",
+				id: "simp",
+				latex: "",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			{
+				type: "expression",
+				id: "simp_vert1",
+				latex: "",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			{
+				type: "expression",
+				id: "simp_vert2",
+				latex: "",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			//#endregion Simpson
 		],
 	},
 	graph: {
@@ -243,35 +294,55 @@ plot.newRandomSeed();
 
 const hAB = plot.HelperExpression({ latex: "[a, b]" });
 hAB.observe("listValue", () => {
-	a = hAB.listValue[0];
-	b = hAB.listValue[1];
-	$("#range span:nth-child(1)").text(a);
-	$("#range span:nth-child(2)").text(b);
-	localStorage.setItem("rangeA", a);
-	localStorage.setItem("rangeB", b);
+	localStorage.setItem(
+		"rangeA",
+		$("#range span:nth-child(1)")
+			.text((a = hAB.listValue[0]))
+			.text()
+	);
+	localStorage.setItem(
+		"rangeB",
+		$("#range span:nth-child(2)")
+			.text((b = hAB.listValue[1]))
+			.text()
+	);
 });
 
-const hS = plot.HelperExpression({ latex: "S_{infsup}" });
+const hS = plot.HelperExpression({ latex: "S" });
 hS.observe("listValue", () => {
 	if (hS.listValue) {
-		let [s, S, I] = !isNaN(hS.listValue[2])
-			? [hS.listValue[0].toFixed(10), hS.listValue[1].toFixed(10), hS.listValue[2].toFixed(10)]
-			: ["Intervallo non valido", "Intervallo non valido", "Intervallo non valido"];
+		let [Sinf, Ssup, Smid, Strap, Ssimp, I] = !isNaN(hS.listValue[5])
+			? hS.listValue.map(i => i.toFixed(10))
+			: [..."000000"].map(_ => "Intervallo non valido");
 
-		if (I == 0) [s, S, I] = [0, 0, 0];
+		if (I == 0) [Sinf, Ssup, Smid, Strap, Ssimp, I] = [0, 0, 0, 0, 0, 0];
 
 		$("#result").html(
-			`<span style="color: #60b030">S<sub>n</sub>: ${s}</span><br>
-			<span style="color: #ff5060">S<sub>N</sub>: ${S}</span><br>
+			`${span("#60b030", "inf", Sinf, I)}
+			${span("#ff5060", "sup", Ssup, I)}
+			${span("#6b53a4", "mid", Smid, I)}
+			${span("#fa9747", "trap", Strap, I)}
+			${span("#6392c1", "simp", Ssimp, I)}
 			<span style="color: #6050ff">Valore Reale: ${I}</span><br>`
 		);
 
-		plot.setExpression({
-			id: "rect_folder (sup and inf)",
-			hidden: isNaN(hS.listValue[2]),
-		});
+		localStorage.setItem("isInvalidRange", (isInvalidRange = isNaN(hS.listValue[5])));
+		hide_show(isInvalidRange ? isInvalidRange : !infsupShow, "rect_folder (sup and inf)");
+		hide_show(isInvalidRange ? isInvalidRange : !midShow, "rect_folder (mid)");
+		hide_show(isInvalidRange ? isInvalidRange : !trapShow, "trap_folder");
+		hide_show(isInvalidRange ? isInvalidRange : !simpsShow, "simp_folder");
 	}
 });
+
+function errorP(known, experimental) {
+	return ((Math.abs(known - experimental) / known) * 100).toFixed(5);
+}
+
+function span(color, sub, val, real) {
+	return `<span style='white-space: pre; color: ${color};'>S<sub>${sub}</sub>:	${val} --> E<sub>%</sub>:${
+		!isNaN(errorP(real, val)) ? errorP(real, val) : 0
+	}%</span><br>`;
+}
 
 //#endregion Helper Expressions
 
@@ -292,21 +363,22 @@ answerMathField.latex(funcLatex);
 //#region Arrow Buttons Code
 
 let timeout, interval;
-$("#slider .button").on("mousedown", e => {
-	sliderButtons(e);
-	changeSlider();
+$("#slider .button")
+	.on("mousedown", e => {
+		sliderButtons(e);
+		changeSlider();
 
-	timeout = setTimeout(() => {
-		interval = setInterval(() => {
-			sliderButtons(e);
-			changeSlider();
-		}, 50);
-	}, 300);
-});
-$(".button").on("mouseup mouseleave", () => {
-	clearTimeout(timeout);
-	clearInterval(interval);
-});
+		timeout = setTimeout(() => {
+			interval = setInterval(() => {
+				sliderButtons(e);
+				changeSlider();
+			}, 50);
+		}, 300);
+	})
+	.on("mouseup mouseleave", () => {
+		clearTimeout(timeout);
+		clearInterval(interval);
+	});
 
 //#endregion Arrow Buttons Code
 
@@ -326,3 +398,37 @@ function sliderButtons(e) {
 }
 
 //#endregion Helper functions
+
+//#region Checkboxes functions
+
+function changeCheckbox(e) {
+	switch (e.target.id) {
+		case "infsup":
+			localStorage.setItem("infsupShow", (infsupShow = e.target.checked));
+			if (!isInvalidRange) hide_show(!infsupShow, "rect_folder (sup and inf)");
+			break;
+		case "middle":
+			localStorage.setItem("midShow", (midShow = e.target.checked));
+			if (!isInvalidRange) hide_show(!midShow, "rect_folder (mid)");
+			break;
+		case "trap":
+			localStorage.setItem("trapShow", (trapShow = e.target.checked));
+			if (!isInvalidRange) hide_show(!trapShow, "trap_folder");
+			break;
+		case "simps":
+			localStorage.setItem("simpsShow", (simpsShow = e.target.checked));
+			if (!isInvalidRange) hide_show(!simpsShow, "simp_folder");
+			break;
+		default:
+			break;
+	}
+}
+
+function hide_show(hidden, folder) {
+	plot.setExpression({
+		id: folder,
+		hidden: hidden,
+	});
+}
+
+//#endregion Checkboxes functions

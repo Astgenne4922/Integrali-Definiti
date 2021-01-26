@@ -42,10 +42,21 @@
 
                 <div id="slider">
                     <p class="button"><i class="arrow left"></i></p>
-                    <input id="plotSlider" type="range" min="0" max="1000" step="1" value="2">
+                    <input id="plotSlider" type="range" min="1" max="1000" step="1" value="2">
                     <p class="button"><i class="arrow right"></i></p>
                 </div>
                 <p id="sliderLabel"></p>
+
+                <div>
+                    <input type="checkbox" name="infsup" id="infsup">
+                    <label for="infsup">Somme Inferiori e Superiori</label>
+                    <input type="checkbox" name="middle" id="middle">
+                    <label for="middle">Punti medi</label>
+                    <input type="checkbox" name="trap" id="trap">
+                    <label for="trap">Trapezoidi</label>
+                    <input type="checkbox" name="simps" id="simps">
+                    <label for="simps">Simpson</label>
+                </div>
 
                 <p id="result">
                     <span style="color: #60b030">S<sub>n</sub>: 0</span><br>
