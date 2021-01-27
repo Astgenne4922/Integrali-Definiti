@@ -38,7 +38,7 @@ const plot = Desmos.GraphingCalculator(document.querySelector("#plot"), {
 plot.setState({
 	expressions: {
 		list: [
-			{ type: "expression", id: "function", latex: `f(x)=${funcLatex}`, color: Desmos.Colors.BLUE },
+			{ type: "expression", id: "function", latex: `f(x)=${funcLatex}`, color: Desmos.Colors.BLACK },
 			{ type: "expression", id: "subdivisions", latex: `n=${$("#plotSlider").val()}` },
 			{ type: "expression", id: "sub_list", latex: "i=[1...n]" },
 			//#region Range
@@ -115,13 +115,14 @@ plot.setState({
 				type: "expression",
 				id: "sum(trap)_list",
 				latex:
-					"S_{trap}=\\left(\\frac{b-a}{n}\\right)\\left(\\frac{f\\left(a\\right)+f\\left(b\\right)}{2}+\\sum_{j=0}^{n-1}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\right)",
+					"S_{trap}=\\left(\\frac{b-a}{n}\\right)\\left(\\frac{f\\left(a\\right)+f\\left(b\\right)}{2}+\\sum_{j=1}^{n-1}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\right)",
 				folderId: "approx_folder",
 			},
 			{
 				type: "expression",
 				id: "sum(simp)_list",
-				latex: "S_{simp}=a",
+				latex:
+					"S_{simp}=\\frac{1}{3}\\left(\\frac{b-a}{2\\cdot\\operatorname{ceil}\\left(\\frac{n}{2}\\right)}\\right)\\left(f\\left(a\\right)+\\sum_{j=1}^{\\operatorname{ceil}\\left(\\frac{n}{2}\\right)}4f\\left(a+\\left(2j-1\\right)\\left(\\frac{b-a}{2\\cdot\\operatorname{ceil}\\left(\\frac{n}{2}\\right)}\\right)\\right)+\\sum_{k=1}^{\\operatorname{ceil}\\left(\\frac{n}{2}\\right)-1}2f\\left(a+2k\\left(\\frac{b-a}{2\\cdot\\operatorname{ceil}\\left(\\frac{n}{2}\\right)}\\right)\\right)+f\\left(b\\right)\\right)",
 				folderId: "approx_folder",
 			},
 			{
@@ -217,18 +218,27 @@ plot.setState({
 				type: "expression",
 				id: "mid_rect_vert2",
 				latex:
-					"x=\\min\\left(b,a\\right)+\\Delta_{X}\\left\\{\\min\\left(0,f\\left(\\frac{\\Delta_{x}+\\Delta_{X}}{\\min\\left(b,a\\right)+2}\\right)\\right)\\le y\\le\\max\\left(0,f\\left(\\frac{\\min\\left(b,a\\right)+\\Delta_{x}+\\Delta_{X}}{2}\\right)\\right)\\right\\}",
+					"x=\\min\\left(b,a\\right)+\\Delta_{X}\\left\\{\\min\\left(0,f\\left(\\min\\left(b,a\\right)+\\frac{\\Delta_{x}+\\Delta_{X}}{2}\\right)\\right)\\le y\\le\\max\\left(0,f\\left(\\min\\left(b,a\\right)+\\frac{\\Delta_{x}+\\Delta_{X}}{2}\\right)\\right)\\right\\}",
 				color: Desmos.Colors.PURPLE,
 				folderId: "rect_folder (mid)",
 			},
 			//#endregion Rectangles (Middle Point Sum)
 			//#region Trapezes
 			{ id: "trap_folder", title: "trap_folder", type: "folder" },
+
+			{
+				type: "expression",
+				id: "T(x)",
+				latex:
+					"T\\left(x\\right)=f\\left(\\min\\left(b,a\\right)+\\Delta_{x}\\right)\\left(\\frac{x-\\min\\left(b,a\\right)-\\Delta_{X}}{\\Delta_{x}-\\Delta_{X}}\\right)+f\\left(\\min\\left(b,a\\right)+\\Delta_{X}\\right)\\left(\\frac{x-\\min\\left(b,a\\right)-\\Delta_{x}}{\\Delta_{X}-\\Delta_{x}}\\right)",
+				hidden: true,
+				folderId: "trap_folder",
+			},
 			{
 				type: "expression",
 				id: "trap",
 				latex:
-					"\\min\\left(0,f\\left(\\Delta_{x}\\right)\\left(\\frac{x-\\min\\left(b,a\\right)-\\Delta_{X}}{\\Delta_{x}-\\Delta_{X}}\\right)+f\\left(\\Delta_{X}\\right)\\left(\\frac{x-\\min\\left(b,a\\right)-\\Delta_{x}}{\\Delta_{X}-\\Delta_{x}}\\right)\\right)\\le y\\le\\max\\left(0,f\\left(\\Delta_{x}\\right)\\left(\\frac{x-\\min\\left(b,a\\right)-\\Delta_{X}}{\\Delta_{x}-\\Delta_{X}}\\right)+f\\left(\\Delta_{X}\\right)\\left(\\frac{x-\\min\\left(b,a\\right)-\\Delta_{x}}{\\Delta_{X}-\\Delta_{x}}\\right)\\right)\\left\\{\\min\\left(b,a\\right)+\\Delta_{x}\\le x\\le\\min\\left(b,a\\right)+\\Delta_{X}\\right\\}",
+					"\\min\\left(0,T\\left(x\\right)\\right)\\le y\\le\\max\\left(0,T\\left(x\\right)\\right)\\left\\{\\min\\left(b,a\\right)+\\Delta_{x}\\le x\\le\\min\\left(b,a\\right)+\\Delta_{X}\\right\\}",
 				color: Desmos.Colors.ORANGE,
 				folderId: "trap_folder",
 			},
@@ -244,7 +254,7 @@ plot.setState({
 				type: "expression",
 				id: "trap_vert2",
 				latex:
-					"x=\\min\\left(b,a\\right)+\\Delta_{X}\\left\\{\\min\\left(0,f\\left(\\min\\left(b,a\\right)+\\Delta_{x}\\right)\\right)\\le y\\le\\max\\left(0,f\\left(\\min\\left(b,a\\right)+\\Delta_{x}\\right)\\right)\\right\\}",
+					"x=\\min\\left(b,a\\right)\\left\\{\\min\\left(0,f\\left(\\min\\left(b,a\\right)\\right)\\right)\\le y\\le\\max\\left(0,f\\left(\\min\\left(b,a\\right)\\right)\\right)\\right\\}",
 				color: Desmos.Colors.ORANGE,
 				folderId: "trap_folder",
 			},
@@ -253,22 +263,69 @@ plot.setState({
 			{ id: "simp_folder", title: "simp_folder", type: "folder" },
 			{
 				type: "expression",
+				id: "i_s",
+				latex: "i_{s}=\\left[1...2\\cdot\\operatorname{ceil}\\left(\\frac{n}{2}\\right)\\right]",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			{
+				type: "expression",
+				id: "delta_s",
+				latex:
+					"\\Delta_{s}=\\frac{\\max\\left(b,a\\right)-\\min\\left(b,a\\right)}{2\\cdot\\operatorname{ceil}\\left(\\frac{n}{2}\\right)}",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			{
+				type: "expression",
+				id: "delta_s1",
+				latex: "\\Delta_{s1}=\\left(\\left[2...2\\cdot\\operatorname{ceil}\\left(\\frac{n}{2}\\right)\\right]-2\\right)\\Delta_{s}",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			{
+				type: "expression",
+				id: "delta_s2",
+				latex: "\\Delta_{s2}=\\left(\\left[2...2\\cdot\\operatorname{ceil}\\left(\\frac{n}{2}\\right)\\right]-1\\right)\\Delta_{s}",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			{
+				type: "expression",
+				id: "delta_s3",
+				latex: "\\Delta_{s3}=\\left[2...2\\cdot\\operatorname{ceil}\\left(\\frac{n}{2}\\right)\\right]\\Delta_{s}",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			{
+				type: "expression",
+				id: "simp_par",
+				latex:
+					"P\\left(x\\right)=f\\left(\\min\\left(b,a\\right)+\\Delta_{s1}\\right)\\cdot\\frac{x-\\min\\left(b,a\\right)-\\Delta_{s2}}{\\Delta_{s1}-\\Delta_{s2}}\\cdot\\frac{x-\\min\\left(b,a\\right)-\\Delta_{s3}}{\\Delta_{s1}-\\Delta_{s3}}+f\\left(\\min\\left(b,a\\right)+\\Delta_{s2}\\right)\\cdot\\frac{x-\\min\\left(b,a\\right)-\\Delta_{s1}}{\\Delta_{s2}-\\Delta_{s1}}\\cdot\\frac{x-\\min\\left(b,a\\right)-\\Delta_{s3}}{\\Delta_{s2}-\\Delta_{s3}}+f\\left(\\min\\left(b,a\\right)+\\Delta_{s3}\\right)\\cdot\\frac{x-\\min\\left(b,a\\right)-\\Delta_{s1}}{\\Delta_{s3}-\\Delta_{s1}}\\cdot\\frac{x-\\min\\left(b,a\\right)-\\Delta_{s2}}{\\Delta_{s3}-\\Delta_{s2}}\\left\\{\\min\\left(b,a\\right)+\\Delta_{s1}\\le x\\le\\min\\left(b,a\\right)+\\Delta_{s3}\\right\\}",
+				color: Desmos.Colors.BLUE,
+				folderId: "simp_folder",
+			},
+			{
+				type: "expression",
 				id: "simp",
-				latex: "",
+				latex:
+					"\\min\\left(0,\\ P\\left(x\\right)\\right)\\le y\\le\\max\\left(0,\\ P\\left(x\\right)\\right)\\left\\{\\min\\left(b,a\\right)+\\Delta_{s1}\\le x\\le\\min\\left(b,a\\right)+\\Delta_{s3}\\right\\}",
 				color: Desmos.Colors.BLUE,
 				folderId: "simp_folder",
 			},
 			{
 				type: "expression",
 				id: "simp_vert1",
-				latex: "",
+				latex:
+					"x=\\min\\left(a,\\ b\\right)+\\left(i_{s}-1\\right)\\Delta_{s}\\left\\{\\min\\left(0,\\ f\\left(\\min\\left(a,\\ b\\right)+\\left(i_{s}-1\\right)\\Delta_{s}\\right)\\right)\\le y\\le\\max\\left(0,\\ f\\left(\\min\\left(a,\\ b\\right)+\\left(i_{s}-1\\right)\\Delta_{s}\\right)\\right)\\right\\}",
 				color: Desmos.Colors.BLUE,
 				folderId: "simp_folder",
 			},
 			{
 				type: "expression",
 				id: "simp_vert2",
-				latex: "",
+				latex:
+					"x=\\max\\left(a,b\\right)\\left\\{\\min\\left(0,f\\left(\\max\\left(a,b\\right)\\right)\\right)\\le y\\le\\max\\left(0,f\\left(\\max\\left(a,b\\right)\\right)\\right)\\right\\}",
 				color: Desmos.Colors.BLUE,
 				folderId: "simp_folder",
 			},
@@ -335,7 +392,7 @@ hS.observe("listValue", () => {
 });
 
 function errorP(known, experimental) {
-	return ((Math.abs(known - experimental) / known) * 100).toFixed(5);
+	return Math.abs((Math.abs(known - experimental) / known) * 100).toFixed(5);
 }
 
 function span(color, sub, val, real) {
