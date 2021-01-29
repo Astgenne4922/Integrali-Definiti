@@ -31,7 +31,7 @@ $("#simps").prop("checked", simpsShow);
 
 const plot = Desmos.GraphingCalculator(document.querySelector("#plot"), {
 	keypad: false,
-	expressions: false,
+	expressions: true,
 	settingsMenu: false,
 });
 
@@ -108,14 +108,14 @@ plot.setState({
 				type: "expression",
 				id: "sum(mid)_list",
 				latex:
-					"S_{mid}=\\sum_{j=1}^{n}f\\left(a+\\left(j-\\frac{1}{2}\\right)\\left(\\frac{b-a}{n}\\right)\\right)\\left(\\frac{b-a}{n}\\right)",
+					"S_{mid}=\\sum_{j=1}^{n}\\left(\\frac{f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)+f\\left(a+\\left(j-1\\right)\\left(\\frac{b-a}{n}\\right)\\right)}{2}\\right)\\left(\\frac{b-a}{n}\\right)",
 				folderId: "approx_folder",
 			},
 			{
 				type: "expression",
 				id: "sum(trap)_list",
 				latex:
-					"S_{trap}=\\left(\\frac{b-a}{n}\\right)\\left(\\frac{f\\left(a\\right)+f\\left(b\\right)}{2}+\\sum_{j=1}^{n-1}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\right)",
+					"S_{trap}=\\left(\\frac{b-a}{n}\\right)\\left(\\frac{f\\left(a\\right)+f\\left(b\\right)}{2}+\\sum_{j=2}^{n-1}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\right)",
 				folderId: "approx_folder",
 			},
 			{
