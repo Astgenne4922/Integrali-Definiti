@@ -115,7 +115,7 @@ plot.setState({
 				type: "expression",
 				id: "sum(trap)_list",
 				latex:
-					"S_{trap}=\\left(\\frac{b-a}{n}\\right)\\left(\\frac{f\\left(a\\right)+f\\left(b\\right)}{2}+\\sum_{j=2}^{n-1}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\right)",
+					"S_{trap}=\\frac{\\left(\\frac{b-a}{n}\\right)}{2}\\left(f\\left(a\\right)+f\\left(b\\right)+2\\sum_{j=1}^{n-1}f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)\\right)",
 				folderId: "approx_folder",
 			},
 			{
