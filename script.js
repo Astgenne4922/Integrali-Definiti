@@ -31,7 +31,7 @@ $("#simps").prop("checked", simpsShow);
 
 const plot = Desmos.GraphingCalculator(document.querySelector("#plot"), {
 	keypad: false,
-	expressions: false,
+	expressions: true,
 	settingsMenu: false,
 });
 
@@ -108,7 +108,7 @@ plot.setState({
 				type: "expression",
 				id: "sum(mid)_list",
 				latex:
-					"S_{mid}=\\sum_{j=1}^{n}\\left(\\frac{f\\left(a+j\\left(\\frac{b-a}{n}\\right)\\right)+f\\left(a+\\left(j-1\\right)\\left(\\frac{b-a}{n}\\right)\\right)}{2}\\right)\\left(\\frac{b-a}{n}\\right)",
+					"S_{mid}=\\sum_{j=1}^{n}\\left(f\\left(\\frac{a+j\\left(\\frac{b-a}{n}\\right)+a+\\left(j-1\\right)\\left(\\frac{b-a}{n}\\right)}{2}\\right)\\right)\\left(\\frac{b-a}{n}\\right)",
 				folderId: "approx_folder",
 			},
 			{
