@@ -31,7 +31,7 @@ $("#simps").prop("checked", simpsShow);
 
 const plot = Desmos.GraphingCalculator(document.querySelector("#plot"), {
 	keypad: false,
-	expressions: true,
+	expressions: false,
 	settingsMenu: false,
 });
 
